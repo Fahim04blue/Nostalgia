@@ -43,6 +43,7 @@ const Navbar = () => {
           src={memories}
           alt="memories"
           height="60"
+          width="60"
         />
       </div>
       <Toolbar className={classes.toolbar}>
