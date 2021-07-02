@@ -17,6 +17,10 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 app.use("/posts", postRoutes);
 app.use("/user", userRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to Nostalgia");
+});
+
 const PORT = process.env.PORT || 5000;
 
 mongoose

@@ -11,12 +11,13 @@ import {
 const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
     selectedFile: "",
   });
+
+  const user = JSON.parse(localStorage.getItem("profile"));
 
   const post = useSelector((state) =>
     currentId ? state.posts.posts.find((post) => post._id === currentId) : 0
@@ -30,7 +31,6 @@ const Form = ({ currentId, setCurrentId }) => {
   const clear = () => {
     setCurrentId(0);
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
@@ -41,14 +41,26 @@ const Form = ({ currentId, setCurrentId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (currentId === 0) {
-      dispatch(createAsyncPost(postData));
+      dispatch(createAsyncPost({ ...postData, name: user?.result?.name }));
       clear();
     } else {
-      dispatch(updateAsyncPost(currentId, postData));
+      dispatch(
+        updateAsyncPost(currentId, { ...postData, name: user?.result?.name })
+      );
 
       clear();
     }
   };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h6">
+          Please Sign In to Create and Share your Post
+        </Typography>
+      </Paper>
+    );
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -60,18 +72,9 @@ const Form = ({ currentId, setCurrentId }) => {
       >
         <Typography variant="h6">
           {" "}
-          {currentId ? `Editing` : `Creating`} a Reminiscence
+          {currentId ? `Edit` : `Create`} Post
         </Typography>
-        <TextField
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
-        />
+
         <TextField
           name="title"
           variant="outlined"

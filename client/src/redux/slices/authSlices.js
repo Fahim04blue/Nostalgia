@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import * as api from "../../api/index";
 
 const authSlices = createSlice({
   name: "auth",
@@ -15,21 +16,29 @@ const authSlices = createSlice({
       localStorage.clear();
       state.authData = null;
     },
-    jwtSignup: (state, { payload }) => {},
-    jwtSignIn: (state, { payload }) => {},
   },
 });
 
-export const { login, logout, jwtSignup, jwtSignIn } = authSlices.actions;
+export const { login, logout } = authSlices.actions;
 
 export const jwtAsyncSignup = (formData, history) => async (dispatch) => {
   try {
-  } catch (error) {}
+    const { data } = await api.signUp(formData);
+    dispatch(login(data));
+    history.push("/");
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const jwtAsyncSignIn = (formData, history) => async (dispatch) => {
   try {
-  } catch (error) {}
+    const { data } = await api.signIn(formData);
+    dispatch(login(data));
+    history.push("/");
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default authSlices.reducer;

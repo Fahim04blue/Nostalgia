@@ -13,7 +13,11 @@ import useStyles from "./AuthStyles";
 import Input from "./Input";
 import Icon from "./Icon";
 import { useDispatch } from "react-redux";
-import { login } from "../../redux/slices/authSlices";
+import {
+  jwtAsyncSignIn,
+  jwtAsyncSignup,
+  login,
+} from "../../redux/slices/authSlices";
 import { useHistory } from "react-router-dom";
 
 const initialState = {
@@ -38,8 +42,11 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // console.log(formData);
     if (isSignup) {
+      dispatch(jwtAsyncSignup(formData, history));
     } else {
+      dispatch(jwtAsyncSignIn(formData, history));
     }
   };
 
@@ -49,7 +56,7 @@ const Auth = () => {
 
   const switchMode = () => {
     setIsSignup((prevIsSignup) => !prevIsSignup);
-    handleShowPassword(false);
+    setShowPassword(false);
   };
 
   const googleSuccess = async (res) => {

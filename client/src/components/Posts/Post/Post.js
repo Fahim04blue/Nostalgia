@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt";
+import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -24,6 +25,35 @@ const Post = ({ post, setCurrentId }) => {
 
   const dispatch = useDispatch();
 
+  const user = JSON.parse(localStorage.getItem("profile"));
+
+  const Likes = () => {
+    if (post?.likes?.length > 0) {
+      return post.likes.find(
+        (like) => like === (user?.result?.googleId || user?.result?._id)
+      ) ? (
+        <>
+          <ThumbUpAltIcon fontSize="small" />
+          &nbsp;
+          {post?.likes?.length > 2
+            ? `You and ${post?.likes?.length - 1} others`
+            : `${post?.likes?.length} `}
+        </>
+      ) : (
+        <>
+          <ThumbUpAltOutlined fontSize="small" />
+          &nbsp;{post?.likes?.length}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <ThumbUpAltOutlined fontSize="small" />
+      </>
+    );
+  };
+
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -32,7 +62,7 @@ const Post = ({ post, setCurrentId }) => {
         title={post.title}
       />
       <div className={classes.overlay}>
-        <Typography variant="h6">{post.creator}</Typography>
+        <Typography variant="h6">{post?.name}</Typography>
         <Typography variant="body2">
           {moment(post.createdAt).fromNow()}
         </Typography>
@@ -58,26 +88,29 @@ const Post = ({ post, setCurrentId }) => {
       <CardActions className={classes.cardActions}>
         <Button
           onClick={() => dispatch(likeAsyncPost(post._id))}
+          disabled={!user?.result}
           size="small"
           color="primary"
         >
-          <ThumbUpAltIcon fontSize="small" />
-          {post.likeCount}
+          <Likes />
         </Button>
-        <ButtonGroup variant="text" size="small" color="primary">
-          <Button onClick={() => dispatch(deleteAsyncPost(post._id))}>
-            <DeleteIcon
-              style={{ cursor: "pointer" }}
-              color="primary"
-              fontSize="small"
-            />
-            Delete
-          </Button>
-          <Button onClick={() => setCurrentId(post._id)}>
-            <EditIcon color="primary" fontSize="small" />
-            Edit
-          </Button>
-        </ButtonGroup>
+        {(user?.result?.googleId === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <ButtonGroup variant="text" size="small" color="primary">
+            <Button onClick={() => dispatch(deleteAsyncPost(post._id))}>
+              <DeleteIcon
+                style={{ cursor: "pointer" }}
+                color="primary"
+                fontSize="small"
+              />
+              Delete
+            </Button>
+            <Button onClick={() => setCurrentId(post._id)}>
+              <EditIcon color="primary" fontSize="small" />
+              Edit
+            </Button>
+          </ButtonGroup>
+        )}
       </CardActions>
     </Card>
   );
