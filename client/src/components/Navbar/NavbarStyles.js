@@ -2,14 +2,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import { deepPurple } from "@material-ui/core/colors";
 
 export default makeStyles((theme) => ({
-  appBar: {
+  root: {
     borderRadius: 15,
     margin: "30px 0",
     display: "flex",
-    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "10px 50px",
+    flexDirection: "row",
   },
   heading: {
     color: "rgba(0,183,255, 1)",
@@ -39,5 +39,24 @@ export default makeStyles((theme) => ({
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
+  },
+  [theme.breakpoints.down("sm")]: {
+    root: {
+      padding: "10px 20px",
+    },
+    heading: {
+      display: "none",
+    },
+    userName: {
+      display: "none",
+    },
+    image: {
+      marginLeft: "5px",
+    },
+    toolbar: {
+      display: "flex",
+      justifyContent: "flex-end",
+      width: "160px",
+    },
   },
 }));
