@@ -4,13 +4,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start":"node index.js",
+    "start": "node index.js",
     "start:dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "shahriar",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -20,5 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.14",
     "nodemon": "^2.0.7"
-  }
+  },
+  "devDependencies": {},
+  "description": ""
 }
